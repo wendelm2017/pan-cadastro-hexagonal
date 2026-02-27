@@ -1,0 +1,57 @@
+/* PrimeNG Theme */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+
+/* Global */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f8f9fa;
+}
+
+/* Tema customizado Banco Pan*/
+.pan-header .p-menubar {
+  background: #00AEEF !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+.pan-header .p-menubar .p-menuitem-link .p-menuitem-text,
+.pan-header .p-menubar .p-menuitem-link .p-menuitem-icon {
+  color: #fff !important;
+}
+.pan-header .p-menubar .p-menuitem-link:hover {
+  background: #0090CC !important;
+}
+
+body {
+  background: #f0f8ff;
+}
+
+/* Remove default HTML file */
+html, body { height: 100%; }
+
+/* Fix Calendar inside Dialog */
+.p-dialog-content {
+  overflow: visible !important;
+}
+.p-dialog {
+  overflow: visible !important;
+}
+
+/* PAN estilo de menu */
+.pan-nav.p-menubar {
+  background: linear-gradient(135deg, #00AEEF 0%, #0077B6 100%) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 24px !important;
+}
+.pan-nav .p-menuitem-link .p-menuitem-text,
+.pan-nav .p-menuitem-link .p-menuitem-icon {
+  color: #fff !important;
+}
+.pan-nav .p-menuitem-link:hover {
+  background: #0090CC !important;
+}
+

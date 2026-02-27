@@ -1,0 +1,6 @@
+@PanCadastro.Adapters.Driving_HostAddress = http://localhost:5167
+
+GET {{PanCadastro.Adapters.Driving_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

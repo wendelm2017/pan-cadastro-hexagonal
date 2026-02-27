@@ -1,0 +1,64 @@
+services:
+  # === SQL Server (Persistência Principal) ===
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: pan-cadastro-sqlserver
+    environment:
+      SA_PASSWORD: "Pan@2024Str0ng!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Pan@2024Str0ng!" -Q "SELECT 1" -C -b
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pan-network
+
+  # === MongoDB (Cache ViaCEP) ===
+  mongodb:
+    image: mongo:7
+    container_name: pan-cadastro-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - pan-network
+
+  # === API .NET 8 ===
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pan-cadastro-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__SqlServer=Server=sqlserver,1433;Database=PanCadastro;User Id=sa;Password=Pan@2024Str0ng!;TrustServerCertificate=True;
+      - MongoDB__ConnectionString=mongodb://mongodb:27017
+      - MongoDB__Database=PanCadastroCache
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    networks:
+      - pan-network
+
+volumes:
+  sqlserver-data:
+  mongodb-data:
+
+networks:
+  pan-network:
+    driver: bridge
+
