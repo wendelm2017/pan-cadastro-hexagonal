@@ -97,15 +97,23 @@ public class EnderecoService : IEnderecoService
     {
         _logger.LogInformation("Consultando CEP: {Cep}", cep);
 
-        var response = await _viaCepClient.ConsultarCepAsync(cep, ct);
-
-        if (response is null || response.Erro)
+        try
         {
-            _logger.LogWarning("CEP não encontrado: {Cep}", cep);
+            var response = await _viaCepClient.ConsultarCepAsync(cep, ct);
+
+            if (response is null || response.Erro)
+            {
+                _logger.LogWarning("CEP não encontrado: {Cep}", cep);
+                return null;
+            }
+
+            _logger.LogInformation("CEP encontrado: {Cep} - {Localidade}/{Uf}", cep, response.Localidade, response.Uf);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao consultar CEP: {Cep}", cep);
             return null;
         }
-
-        _logger.LogInformation("CEP encontrado: {Cep} - {Localidade}/{Uf}", cep, response.Localidade, response.Uf);
-        return response;
     }
 }

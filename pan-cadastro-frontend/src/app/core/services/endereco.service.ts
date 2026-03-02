@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, catchError, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   ApiResponse,
@@ -39,7 +39,10 @@ export class EnderecoService {
   consultarCep(cep: string): Observable<ViaCepResponseDto | null> {
     const apenasDigitos = cep.replace(/\D/g, '');
     return this.http.get<ApiResponse<ViaCepResponseDto>>(`${this.url}/cep/${apenasDigitos}`)
-      .pipe(map(r => r.dados));
+      .pipe(
+        map(r => r.dados),
+        catchError(() => of(null))
+      );
   }
 
   criar(request: CriarEnderecoRequest): Observable<EnderecoResponse> {

@@ -145,6 +145,7 @@ import { UFS } from '../../core/models/constants';
       </p-toolbar>
 
       <div [hidden]="!formEnderecoVisivel" class="surface-100 p-3 border-round mb-3">
+        <div class="font-semibold mb-2">{{ enderecoEditandoId ? 'Editar Endereço' : 'Novo Endereço' }}</div>
         <form [formGroup]="formEndereco" (ngSubmit)="salvarEndereco()">
           <div class="grid p-fluid">
             <div class="col-12 md:col-4">
@@ -192,8 +193,8 @@ import { UFS } from '../../core/models/constants';
             </div>
           </div>
           <div class="flex justify-content-end gap-2 mt-3">
-            <p-button label="Cancelar" size="small" severity="secondary" (onClick)="formEnderecoVisivel = false"></p-button>
-            <p-button label="Salvar" size="small" icon="pi pi-check" type="submit"
+            <p-button label="Cancelar" size="small" severity="secondary" (onClick)="cancelarFormEndereco()"></p-button>
+            <p-button [label]="enderecoEditandoId ? 'Atualizar Endereço' : 'Salvar Endereço'" size="small" icon="pi pi-check" type="submit"
                       [disabled]="formEndereco.invalid" [loading]="salvandoEndereco"></p-button>
           </div>
         </form>
@@ -202,7 +203,7 @@ import { UFS } from '../../core/models/constants';
       <p-table [value]="enderecosDaEmpresa" styleClass="p-datatable-sm" responsiveLayout="scroll">
         <ng-template pTemplate="header">
           <tr>
-            <th>CEP</th><th>Logradouro</th><th>Nº</th><th>Bairro</th><th>Cidade/UF</th><th style="width:6rem">Ações</th>
+            <th>CEP</th><th>Logradouro</th><th>Nº</th><th>Bairro</th><th>Cidade/UF</th><th style="width:8rem">Ações</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-end>
@@ -213,6 +214,8 @@ import { UFS } from '../../core/models/constants';
             <td>{{ end.bairro }}</td>
             <td>{{ end.cidade }}/{{ end.estado }}</td>
             <td>
+              <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="info" size="small"
+                        pTooltip="Editar" (onClick)="editarEndereco(end)" class="mr-1"></p-button>
               <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" size="small"
                         (onClick)="removerEndereco(end)"></p-button>
             </td>
@@ -243,6 +246,7 @@ export class PessoaJuridicaListComponent implements OnInit {
   formEndereco!: FormGroup;
   buscandoCep = false;
   salvandoEndereco = false;
+  enderecoEditandoId: string | null = null;
   cepDetalhes: any = null;
   cepDetalhesAberto = false;
   ufs = UFS;
@@ -376,6 +380,7 @@ export class PessoaJuridicaListComponent implements OnInit {
     this.empresaSelecionada = empresa;
     this.enderecosDaEmpresa = empresa.enderecos || [];
     this.formEnderecoVisivel = false;
+    this.enderecoEditandoId = null;
     this.dialogEnderecosVisivel = true;
     this.carregarEnderecos(empresa.id);
   }
@@ -387,10 +392,32 @@ export class PessoaJuridicaListComponent implements OnInit {
   }
 
   abrirFormEndereco(): void {
+    this.enderecoEditandoId = null;
     this.formEndereco.reset();
     this.cepDetalhes = null;
     this.cepDetalhesAberto = false;
     this.formEnderecoVisivel = true;
+  }
+
+  editarEndereco(endereco: EnderecoResponse): void {
+    this.enderecoEditandoId = endereco.id;
+    this.formEndereco.patchValue({
+      cep: endereco.cep,
+      logradouro: endereco.logradouro,
+      numero: endereco.numero,
+      complemento: endereco.complemento,
+      bairro: endereco.bairro,
+      cidade: endereco.cidade,
+      estado: endereco.estado
+    });
+    this.cepDetalhes = null;
+    this.cepDetalhesAberto = false;
+    this.formEnderecoVisivel = true;
+  }
+
+  cancelarFormEndereco(): void {
+    this.enderecoEditandoId = null;
+    this.formEnderecoVisivel = false;
   }
 
   consultarCep(): void {
@@ -407,9 +434,10 @@ export class PessoaJuridicaListComponent implements OnInit {
           });
           this.cepDetalhes = dados;
           this.messageService.add({ severity: 'info', summary: 'CEP encontrado', detail: `${dados.localidade}/${dados.uf}` });
+        } else {
+          this.messageService.add({ severity: 'warn', summary: 'CEP', detail: 'CEP não encontrado. Verifique o número digitado.', life: 4000 });
         }
-      },
-      error: () => { this.buscandoCep = false; }
+      }
     });
   }
 
@@ -417,21 +445,41 @@ export class PessoaJuridicaListComponent implements OnInit {
     if (this.formEndereco.invalid || !this.empresaSelecionada) return;
     this.salvandoEndereco = true;
     const val = this.formEndereco.value;
-    this.enderecoService.criar({
-      cep: val.cep, logradouro: val.logradouro, numero: val.numero,
-      bairro: val.bairro, cidade: val.cidade, estado: val.estado,
-      complemento: val.complemento || null,
-      pessoaFisicaId: null,
-      pessoaJuridicaId: this.empresaSelecionada.id
-    }).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Endereço criado.' });
-        this.formEnderecoVisivel = false; this.salvandoEndereco = false;
-        this.carregarEnderecos(this.empresaSelecionada!.id);
-        this.carregarEmpresas();
-      },
-      error: () => { this.salvandoEndereco = false; }
-    });
+
+    if (this.enderecoEditandoId) {
+      this.enderecoService.atualizar(this.enderecoEditandoId, {
+        cep: val.cep, logradouro: val.logradouro, numero: val.numero,
+        bairro: val.bairro, cidade: val.cidade, estado: val.estado,
+        complemento: val.complemento || null
+      }).subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Endereço atualizado.' });
+          this.formEnderecoVisivel = false;
+          this.salvandoEndereco = false;
+          this.enderecoEditandoId = null;
+          this.carregarEnderecos(this.empresaSelecionada!.id);
+          this.carregarEmpresas();
+        },
+        error: () => { this.salvandoEndereco = false; }
+      });
+    } else {
+      this.enderecoService.criar({
+        cep: val.cep, logradouro: val.logradouro, numero: val.numero,
+        bairro: val.bairro, cidade: val.cidade, estado: val.estado,
+        complemento: val.complemento || null,
+        pessoaFisicaId: null,
+        pessoaJuridicaId: this.empresaSelecionada.id
+      }).subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Endereço criado.' });
+          this.formEnderecoVisivel = false;
+          this.salvandoEndereco = false;
+          this.carregarEnderecos(this.empresaSelecionada!.id);
+          this.carregarEmpresas();
+        },
+        error: () => { this.salvandoEndereco = false; }
+      });
+    }
   }
 
   removerEndereco(endereco: EnderecoResponse): void {

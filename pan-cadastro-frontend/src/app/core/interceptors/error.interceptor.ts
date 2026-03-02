@@ -10,6 +10,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // consulta de CEP tem tratamento próprio no componente
+      if (req.url.includes('/cep/')) {
+        return throwError(() => error);
+      }
+
       let mensagem = 'Erro inesperado. Tente novamente.';
 
       if (error.error?.mensagem) {

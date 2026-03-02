@@ -75,6 +75,11 @@ public class ViaCepClient : IViaCepClient
             _logger.LogWarning(ex, "Timeout ao consultar ViaCEP para CEP: {Cep}", cep);
             return null;
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro inesperado ao consultar ViaCEP para CEP: {Cep}", cep);
+            return null;
+        }
     }
 
     // DTO interno para deserialização do JSON de retorno do ViaCEP.
