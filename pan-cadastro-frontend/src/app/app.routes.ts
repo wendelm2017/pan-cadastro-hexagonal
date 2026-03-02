@@ -1,9 +1,5 @@
 import { Routes } from '@angular/router';
-//definição das rotas do aplicativo, associando caminhos a componentes específicos. 
-// A rota raiz ('') carrega o componente HomeComponent, enquanto as rotas 
-// '/pessoas-fisicas', '/pessoas-juridicas' e '/auditoria' carregam os componentes 
-// correspondentes para cada seção do sistema. A rota '**' é um wildcard que redireciona
-//  para a página inicial caso o caminho não corresponda a nenhuma rota definida.
+// rotas com lazy loading
 export const routes: Routes = [
   {
     path: '',

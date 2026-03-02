@@ -4,11 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-//componente raiz do aplicativo, que define a estrutura básica da interface, 
-//incluindo a barra de navegação, o rodapé e o router-outlet para renderizar os componentes
-//  das rotas. Ele também configura os itens do menu para navegar entre as diferentes seções
-//  do sistema, como início, pessoa física, pessoa jurídica e auditoria. O componente utiliza
-//  diversos módulos do PrimeNG para a interface e interatividade.
+// Shell da aplicação: topbar PAN + menu + router-outlet
 @Component({
   selector: 'app-root',
   standalone: true,

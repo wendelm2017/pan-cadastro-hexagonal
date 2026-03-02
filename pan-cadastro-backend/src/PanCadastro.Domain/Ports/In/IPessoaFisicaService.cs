@@ -3,9 +3,7 @@ using PanCadastro.Domain.Entities;
 namespace PanCadastro.Domain.Ports.In;
 
 // Esse Port In é o contrato do caso de uso de Pessoa Física.
-// O Controller (Driving Adapter) chama esta interface e a Application Layer implementa.
-//Ele define as operações de CRUD para Pessoa Física, e a implementação concreta do serviço
-// de domínio na Application Layer
+// Controller chama esta interface, Application implementa
 public interface IPessoaFisicaService
 {
     Task<PessoaFisica> ObterPorIdAsync(Guid id, CancellationToken ct = default);

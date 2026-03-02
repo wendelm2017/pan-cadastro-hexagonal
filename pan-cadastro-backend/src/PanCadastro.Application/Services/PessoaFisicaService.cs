@@ -61,7 +61,6 @@ public class PessoaFisicaService : IPessoaFisicaService
     }
 
     // Esse método atualiza um endereço existente, validando os dados de entrada e usando o repositório para atualizar o endereço no banco de dados.
-    // Ele também registra logs para acompanhar a atualização do endereço.
     public async Task<PessoaFisica> AtualizarAsync(
         Guid id, string nome, DateTime dataNascimento,
         string email, string? telefone, CancellationToken ct = default)
@@ -80,7 +79,6 @@ public class PessoaFisicaService : IPessoaFisicaService
     }
 
     // Esse método remove uma pessoa física por ID, usando o repositório para verificar se a pessoa existe e para removê-la do banco de dados.
-    // Ele também registra logs para acompanhar a remoção da pessoa.
     public async Task RemoverAsync(Guid id, CancellationToken ct = default)
     {
         _logger.LogInformation("Removendo Pessoa Física ID: {Id}", id);

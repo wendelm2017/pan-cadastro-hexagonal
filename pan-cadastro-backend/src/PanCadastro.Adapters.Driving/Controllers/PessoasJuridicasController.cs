@@ -6,7 +6,7 @@ using PanCadastro.Domain.Ports.In;
 
 namespace PanCadastro.Adapters.Driving.Controllers;
 
-// O controller de Pessoas Jurídicas é responsável por expor as operações relacionadas a pessoas jurídicas via API REST.
+// CRUD de Pessoa Jurídica
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]

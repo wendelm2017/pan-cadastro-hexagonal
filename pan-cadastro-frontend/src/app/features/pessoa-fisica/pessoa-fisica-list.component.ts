@@ -18,8 +18,7 @@ import { PessoaFisicaService } from '../../core/services/pessoa-fisica.service';
 import { EnderecoService } from '../../core/services/endereco.service';
 import { PessoaFisicaResponse, EnderecoResponse } from '../../core/models/api.models';
 import { UFS } from '../../core/models/constants';
-//template angular para o componente de listagem de pessoas físicas, que inclui uma tabela
-//  com paginação, filtros e ações para editar, remover e gerenciar endereços. O componente também possui um dialog para criar/editar pessoas físicas e outro para listar e adicionar endereços. Ele utiliza diversos módulos do PrimeNG para a interface e interatividade, além de serviços para interagir com a API de pessoas físicas e endereços.
+// Tela de PF: tabela + dialogs de edição e endereços
 @Component({
   selector: 'app-pessoa-fisica-list',
   standalone: true,
@@ -100,11 +99,12 @@ import { UFS } from '../../core/models/constants';
             <label for="nome" class="font-bold block mb-1">Nome *</label>
             <input pInputText id="nome" formControlName="nome" placeholder="Nome completo" />
           </div>
-          <div class="col-12 md:col-6" *ngIf="!editando">
-            <label for="cpf" class="font-bold block mb-1">CPF *</label>
-            <p-inputMask id="cpf" formControlName="cpf" mask="999.999.999-99" placeholder="000.000.000-00"></p-inputMask>
+          <div class="col-12 md:col-6">
+            <label for="cpf" class="font-bold block mb-1">CPF {{editando ? '(somente leitura)' : '*'}}</label>
+            <p-inputMask id="cpf" formControlName="cpf" mask="999.999.999-99" placeholder="000.000.000-00"
+                         [styleClass]="editando ? 'p-disabled' : ''"></p-inputMask>
           </div>
-          <div class="col-12" [ngClass]="editando ? 'col-12' : 'md:col-6'">
+          <div class="col-12 md:col-6">
             <label for="dataNascimento" class="font-bold block mb-1">Data Nascimento *</label>
             <p-calendar id="dataNascimento" formControlName="dataNascimento" dateFormat="dd/mm/yy"
                         [showIcon]="true" [maxDate]="hoje" placeholder="dd/mm/aaaa"></p-calendar>
@@ -174,6 +174,18 @@ import { UFS } from '../../core/models/constants';
               <label class="font-bold block mb-1">UF *</label>
               <p-dropdown formControlName="estado" [options]="ufs" placeholder="UF"></p-dropdown>
             </div>
+            <div class="col-12" *ngIf="cepDetalhes">
+              <a class="text-sm cursor-pointer no-underline text-primary" (click)="cepDetalhesAberto = !cepDetalhesAberto">
+                <i class="pi" [ngClass]="cepDetalhesAberto ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+                Detalhes do CEP
+              </a>
+              <div *ngIf="cepDetalhesAberto" class="surface-200 border-round p-2 text-sm flex align-items-center gap-3 mt-1">
+                <span><i class="pi pi-map-marker mr-1"></i>{{ cepDetalhes.estado }} — {{ cepDetalhes.regiao }}</span>
+                <span *ngIf="cepDetalhes.ddd">DDD: {{ cepDetalhes.ddd }}</span>
+                <span *ngIf="cepDetalhes.ibge">IBGE: {{ cepDetalhes.ibge }}</span>
+                <span *ngIf="cepDetalhes.siafi">SIAFI: {{ cepDetalhes.siafi }}</span>
+              </div>
+            </div>
           </div>
           <div class="flex justify-content-end gap-2 mt-3">
             <p-button label="Cancelar" size="small" severity="secondary" (onClick)="formEnderecoVisivel = false"></p-button>
@@ -233,6 +245,8 @@ export class PessoaFisicaListComponent implements OnInit {
   formEndereco!: FormGroup;
   buscandoCep = false;
   salvandoEndereco = false;
+  cepDetalhes: any = null;
+  cepDetalhesAberto = false;
   ufs = UFS;
 
   constructor(
@@ -374,6 +388,8 @@ export class PessoaFisicaListComponent implements OnInit {
 
   abrirFormEndereco(): void {
     this.formEndereco.reset();
+    this.cepDetalhes = null;
+    this.cepDetalhesAberto = false;
     this.formEnderecoVisivel = true;
   }
 
@@ -391,6 +407,7 @@ export class PessoaFisicaListComponent implements OnInit {
             cidade: dados.localidade,
             estado: dados.uf
           });
+          this.cepDetalhes = dados;
           this.messageService.add({ severity: 'info', summary: 'CEP encontrado', detail: `${dados.localidade}/${dados.uf}` });
         }
       },

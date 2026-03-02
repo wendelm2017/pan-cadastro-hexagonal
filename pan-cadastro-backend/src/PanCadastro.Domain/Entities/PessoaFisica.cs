@@ -63,7 +63,7 @@ public class PessoaFisica : BaseEntity
         MarcarAtualizado();
     }
 
-    // Regras de Negócio (Rich Domain Model) — validações e formatações encapsuladas na entidade.
+    // --- Regras de Negócio ---
     private void SetNome(string nome)
     {
         if (string.IsNullOrWhiteSpace(nome))

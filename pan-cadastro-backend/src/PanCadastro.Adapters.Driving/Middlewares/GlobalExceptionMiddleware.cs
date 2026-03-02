@@ -13,14 +13,12 @@ public class GlobalExceptionMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<GlobalExceptionMiddleware> _logger;
 
-    // O construtor recebe o próximo middleware na pipeline e um logger para registrar erros.
     public GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
     {
         _next = next;
         _logger = logger;
     }
 
-    //aqui eu uso o método InvokeAsync para capturar exceções lançadas durante o processamento da requisição.
     public async Task InvokeAsync(HttpContext context)
     {
         try
@@ -33,8 +31,7 @@ public class GlobalExceptionMiddleware
         }
     }
 
-    // O método HandleExceptionAsync é responsável por mapear as exceções para status
-    // codes e mensagens apropriadas.    
+    // mapeia exception → status code
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var (statusCode, message) = exception switch

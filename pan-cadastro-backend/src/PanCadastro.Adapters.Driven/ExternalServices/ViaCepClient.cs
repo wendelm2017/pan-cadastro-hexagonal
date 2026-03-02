@@ -48,7 +48,7 @@ public class ViaCepClient : IViaCepClient
             if (viaCepDto is null || viaCepDto.Erro)
             {
                 _logger.LogWarning("CEP não encontrado no ViaCEP: {Cep}", cep);
-                return new ViaCepResponse(cep, "", "", "", "", "", true);
+                return new ViaCepResponse(cep, "", "", "", "", "", Erro: true);
             }
 
             return new ViaCepResponse(
@@ -57,7 +57,12 @@ public class ViaCepClient : IViaCepClient
                 Complemento: viaCepDto.Complemento ?? "",
                 Bairro: viaCepDto.Bairro ?? "",
                 Localidade: viaCepDto.Localidade ?? "",
-                Uf: viaCepDto.Uf ?? ""
+                Uf: viaCepDto.Uf ?? "",
+                Estado: viaCepDto.Estado ?? "",
+                Regiao: viaCepDto.Regiao ?? "",
+                Ibge: viaCepDto.Ibge ?? "",
+                Ddd: viaCepDto.Ddd ?? "",
+                Siafi: viaCepDto.Siafi ?? ""
             );
         }
         catch (HttpRequestException ex)
@@ -92,6 +97,21 @@ public class ViaCepClient : IViaCepClient
 
         [JsonPropertyName("uf")]
         public string? Uf { get; set; }
+
+        [JsonPropertyName("estado")]
+        public string? Estado { get; set; }
+
+        [JsonPropertyName("regiao")]
+        public string? Regiao { get; set; }
+
+        [JsonPropertyName("ibge")]
+        public string? Ibge { get; set; }
+
+        [JsonPropertyName("ddd")]
+        public string? Ddd { get; set; }
+
+        [JsonPropertyName("siafi")]
+        public string? Siafi { get; set; }
 
         [JsonPropertyName("erro")]
         public bool Erro { get; set; }

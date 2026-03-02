@@ -6,10 +6,7 @@ using PanCadastro.Domain.Entities;
 
 namespace PanCadastro.CrossCutting;
 
-//Essa classe é responsável por popular o banco de dados com dados iniciais para teste e desenvolvimento.
-//Ela é executada durante a inicialização da aplicação, aplicando as migrations pendentes e
-//inserindo registros de exemplo. O método SeedAsync é chamado no Program.cs para garantir
-// que o banco esteja pronto para uso com dados de demonstração.Registra logs para acompanhar o processo de seeding e tratar possíveis erros.
+// Seed: aplica migrations e insere dados de demo se o banco tiver vazio
 public static class DatabaseSeeder
 {
     public static async Task SeedAsync(IServiceProvider serviceProvider)

@@ -18,8 +18,7 @@ import { PessoaJuridicaService } from '../../core/services/pessoa-juridica.servi
 import { EnderecoService } from '../../core/services/endereco.service';
 import { PessoaJuridicaResponse, EnderecoResponse } from '../../core/models/api.models';
 import { UFS } from '../../core/models/constants';
-
-//template angular para o componente de listagem de pessoas jurídicas, que inclui uma tabela
+// Tela de PJ: tabela + dialogs
 @Component({
   selector: 'app-pessoa-juridica-list',
   standalone: true,
@@ -103,9 +102,10 @@ import { UFS } from '../../core/models/constants';
             <label class="font-bold block mb-1">Nome Fantasia *</label>
             <input pInputText formControlName="nomeFantasia" placeholder="Nome Fantasia" />
           </div>
-          <div class="col-12 md:col-6" *ngIf="!editando">
-            <label class="font-bold block mb-1">CNPJ *</label>
-            <p-inputMask formControlName="cnpj" mask="99.999.999/9999-99" placeholder="00.000.000/0000-00"></p-inputMask>
+          <div class="col-12 md:col-6">
+            <label class="font-bold block mb-1">CNPJ {{editando ? '(somente leitura)' : '*'}}</label>
+            <p-inputMask formControlName="cnpj" mask="99.999.999/9999-99" placeholder="00.000.000/0000-00"
+                         [styleClass]="editando ? 'p-disabled' : ''"></p-inputMask>
           </div>
           <div class="col-12 md:col-6">
             <label class="font-bold block mb-1">Data Abertura *</label>
@@ -178,6 +178,18 @@ import { UFS } from '../../core/models/constants';
               <label class="font-bold block mb-1">UF *</label>
               <p-dropdown formControlName="estado" [options]="ufs" placeholder="UF"></p-dropdown>
             </div>
+            <div class="col-12" *ngIf="cepDetalhes">
+              <a class="text-sm cursor-pointer no-underline text-primary" (click)="cepDetalhesAberto = !cepDetalhesAberto">
+                <i class="pi" [ngClass]="cepDetalhesAberto ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+                Detalhes do CEP
+              </a>
+              <div *ngIf="cepDetalhesAberto" class="surface-200 border-round p-2 text-sm flex align-items-center gap-3 mt-1">
+                <span><i class="pi pi-map-marker mr-1"></i>{{ cepDetalhes.estado }} — {{ cepDetalhes.regiao }}</span>
+                <span *ngIf="cepDetalhes.ddd">DDD: {{ cepDetalhes.ddd }}</span>
+                <span *ngIf="cepDetalhes.ibge">IBGE: {{ cepDetalhes.ibge }}</span>
+                <span *ngIf="cepDetalhes.siafi">SIAFI: {{ cepDetalhes.siafi }}</span>
+              </div>
+            </div>
           </div>
           <div class="flex justify-content-end gap-2 mt-3">
             <p-button label="Cancelar" size="small" severity="secondary" (onClick)="formEnderecoVisivel = false"></p-button>
@@ -231,6 +243,8 @@ export class PessoaJuridicaListComponent implements OnInit {
   formEndereco!: FormGroup;
   buscandoCep = false;
   salvandoEndereco = false;
+  cepDetalhes: any = null;
+  cepDetalhesAberto = false;
   ufs = UFS;
 
   constructor(
@@ -374,6 +388,8 @@ export class PessoaJuridicaListComponent implements OnInit {
 
   abrirFormEndereco(): void {
     this.formEndereco.reset();
+    this.cepDetalhes = null;
+    this.cepDetalhesAberto = false;
     this.formEnderecoVisivel = true;
   }
 
@@ -389,6 +405,7 @@ export class PessoaJuridicaListComponent implements OnInit {
             logradouro: dados.logradouro, bairro: dados.bairro,
             cidade: dados.localidade, estado: dados.uf
           });
+          this.cepDetalhes = dados;
           this.messageService.add({ severity: 'info', summary: 'CEP encontrado', detail: `${dados.localidade}/${dados.uf}` });
         }
       },

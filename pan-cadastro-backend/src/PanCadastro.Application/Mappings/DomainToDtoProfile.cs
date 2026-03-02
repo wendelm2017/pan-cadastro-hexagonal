@@ -5,9 +5,7 @@ using PanCadastro.Domain.Ports.Out;
 
 namespace PanCadastro.Application.Mappings;
 
-//Esse mapper faz a conversão entre as entidades do domínio e os DTOs de resposta usados na API,
-//ele é configurado usando o AutoMapper, que é uma biblioteca popular para mapeamento de objetos em .NET.
-// O DomainToDtoProfile define as regras de mapeamento, como
+// Perfil de mapeamento Domain → DTO
 public class DomainToDtoProfile : Profile
 {
     public DomainToDtoProfile()

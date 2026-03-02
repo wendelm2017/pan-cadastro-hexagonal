@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 //template angular para a página inicial do sistema, que apresenta dois cards: 
-// um para o cadastro de pessoas físicas e outro para o cadastro de pessoas jurídicas. Cada card contém uma breve descrição e um botão que direciona o usuário para a respectiva seção do sistema. O layout é responsivo, adaptando-se a diferentes tamanhos de tela usando as classes de grid do PrimeNG.
+// Home com cards de PF e PJ
 @Component({
   selector: 'app-home',
   standalone: true,

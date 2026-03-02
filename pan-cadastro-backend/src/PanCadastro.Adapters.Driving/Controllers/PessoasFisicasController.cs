@@ -6,7 +6,7 @@ using PanCadastro.Domain.Ports.In;
 
 namespace PanCadastro.Adapters.Driving.Controllers;
 
-// O controller de Pessoas Físicas é responsável por expor as operações relacionadas a pessoas físicas via API REST.
+// CRUD de Pessoa Física
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]

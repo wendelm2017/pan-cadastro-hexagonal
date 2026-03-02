@@ -81,7 +81,6 @@ public class PessoaJuridicaService : IPessoaJuridicaService
     }
 
     // Esse método remove uma pessoa jurídica por ID, usando o repositório para verificar se a pessoa existe e para removê-la do banco de dados.
-    // Ele também registra logs para acompanhar a remoção da pessoa.
     public async Task RemoverAsync(Guid id, CancellationToken ct = default)
     {
         _logger.LogInformation("Removendo Pessoa Jurídica ID: {Id}", id);

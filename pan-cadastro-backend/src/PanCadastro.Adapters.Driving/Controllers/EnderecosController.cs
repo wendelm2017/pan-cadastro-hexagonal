@@ -6,7 +6,7 @@ using PanCadastro.Domain.Ports.In;
 
 namespace PanCadastro.Adapters.Driving.Controllers;
 
-// O controller de Endereços é responsável por expor as operações relacionadas a endereços via API REST.
+// CRUD de Endereços + consulta ViaCEP
 // Ele recebe as requisições HTTP, valida os dados de entrada, e delega a lógica de negócio para o 
 //serviço de endereços (IEnderecoService). O controller também usa AutoMapper para mapear entre os DTOs de request/response e as entidades do Domain. 
 //Ele retorna respostas padronizadas usando ApiResponse<T> para consistência na API.

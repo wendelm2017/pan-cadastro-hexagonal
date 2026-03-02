@@ -14,7 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { AuditoriaService, LogEntry, LogResumo } from '../../core/services/auditoria.service';
 //template angular para o componente de auditoria, que exibe uma tabela de logs com filtros
-// por nível, data e busca, além de um resumo dos logs por data. Ele também inclui um dialog para mostrar detalhes dos logs selecionados. O componente utiliza diversos módulos do PrimeNG para a interface e interatividade.
+// Tela de auditoria: logs do Serilog com filtros
 @Component({
   selector: 'app-auditoria',
   standalone: true,

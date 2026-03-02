@@ -4,9 +4,7 @@ using PanCadastro.Domain.Ports.Out;
 namespace PanCadastro.Domain.Ports.In;
 
 // Port de Entrada para Endereço com consulta ViaCEP.
-// Na arquitetura hexagonal, esse serviço de domínio é a porta de entrada
-// para as operações e nesse caso inclui a consulta ao ViaCEP
-// Ele define as operações que serão implementadas no serviço de endereços
+// contrato do caso de uso, inclui consulta ViaCEP
 public interface IEnderecoService
 {
     Task<Endereco> ObterPorIdAsync(Guid id, CancellationToken ct = default);

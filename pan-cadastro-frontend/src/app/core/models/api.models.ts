@@ -1,5 +1,4 @@
-//esse script define as interfaces para as respostas da API e os
-// objetos de requisição usados no frontend.
+// interfaces de request/response da API
 export interface ApiResponse<T> {
   sucesso: boolean;
   mensagem: string | null;
@@ -60,6 +59,11 @@ export interface ViaCepResponseDto {
   bairro: string;
   localidade: string;
   uf: string;
+  estado: string;
+  regiao: string;
+  ibge: string;
+  ddd: string;
+  siafi: string;
 }
 
 export interface CriarPessoaFisicaRequest {

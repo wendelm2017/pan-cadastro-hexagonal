@@ -1,8 +1,6 @@
 namespace PanCadastro.Application.DTOs.Responses;
 
-//Dto criados para envio de dados de pessoa física, pessoa jurídica e endereço nas respostas da API.
-//uso o tipo record para criar DTOs imutáveis e concisos pois o record é ideal para representar dados
-//que não mudam após a criação, como os dados de uma pessoa física.
+// DTOs de resposta da API (records imutáveis)
 public record PessoaFisicaResponse(
     Guid Id,
     string Nome,
@@ -56,7 +54,12 @@ public record ViaCepResponseDto(
     string Complemento,
     string Bairro,
     string Localidade,
-    string Uf
+    string Uf,
+    string Estado,
+    string Regiao,
+    string Ibge,
+    string Ddd,
+    string Siafi
 );
 
 // emvelope padrão para respostas da API.

@@ -3,9 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-//esse serviço é responsável por interagir com a API de auditoria para obter logs
-// e resumos de logs. Ele define as interfaces para os dados de log e os métodos 
-// para buscar os logs com filtros e obter um resumo dos logs por data.
+// Service de auditoria — puxa logs do backend
 export interface LogEntry {
   timestamp: string;
   nivel: string;

@@ -15,5 +15,10 @@ public record ViaCepResponse(
     string Bairro,
     string Localidade,
     string Uf,
+    string Estado = "",
+    string Regiao = "",
+    string Ibge = "",
+    string Ddd = "",
+    string Siafi = "",
     bool Erro = false
 );
