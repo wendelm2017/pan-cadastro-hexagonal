@@ -1,0 +1,30 @@
+{
+    "DBSubnetGroup": {
+        "DBSubnetGroupName": "pancadastro-db-subnet",
+        "DBSubnetGroupDescription": "PanCadastro DB Subnets",
+        "VpcId": "vpc-08219c4c44c33b997",
+        "SubnetGroupStatus": "Complete",
+        "Subnets": [
+            {
+                "SubnetIdentifier": "subnet-0669726fa4c8fa882",
+                "SubnetAvailabilityZone": {
+                    "Name": "sa-east-1a"
+                },
+                "SubnetOutpost": {},
+                "SubnetStatus": "Active"
+            },
+            {
+                "SubnetIdentifier": "subnet-0d5d2d9a6c1fb2f3c",
+                "SubnetAvailabilityZone": {
+                    "Name": "sa-east-1b"
+                },
+                "SubnetOutpost": {},
+                "SubnetStatus": "Active"
+            }
+        ],
+        "DBSubnetGroupArn": "arn:aws:rds:sa-east-1:400138961129:subgrp:pancadastro-db-subnet",
+        "SupportedNetworkTypes": [
+            "IPV4"
+        ]
+    }
+}
